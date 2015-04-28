@@ -10,18 +10,24 @@ RUN \
   yum install -y \
     ImageMagick \
     poppler-utils \
-    ffmpeg \
-    graphviz
+    ffmpeg
 
 RUN wget -O /usr/local/src/jhove.tar.gz http://downloads.sourceforge.net/project/jhove/jhove/JHOVE%201.11/jhove-1_11.tar.gz
 RUN wget -O /usr/local/src/yamdi.tar.gz http://downloads.sourceforge.net/project/yamdi/yamdi/1.9/yamdi-1.9.tar.gz
+RUN wget -O /usr/local/src/graphviz.tar.gz http://www.graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.38.0.tar.gz
 RUN cd /usr/local/src && tar xvzf yamdi.tar.gz
 RUN cd /usr/local/src && tar xvzf jhove.tar.gz
+RUN cd /usr/local/src && tar xvzf graphviz.tar.gz
 
 RUN yum group install -y "Development Tools"
 
 # Compile yamdi, move it, chmod it, clean up
 RUN cd /usr/local/src/yamdi-1.9 && gcc yamdi.c -o yamdi -O2 -Wall && mv yamdi /usr/bin/yamdi && chmod +x /usr/bin/yamdi && cd .. && rm -rf yamdi-1.9 && rm -f yamdi.tar.gz
+
+RUN yum install -y cairo-devel expat-devel freetype-devel gd-devel fontconfig-devel glib libpng zlib pango-devel pango
+
+# Install graphviz from source because all rpm options give segfaults
+RUN cd /usr/local/src/graphviz-2.38.0 && ./configure && make && make install && ln -s /usr/local/bin/dot /usr/bin/dot
 
 #Install Java for Jhove
 RUN yum install -y java-1.8.0-openjdk-headless

@@ -25,9 +25,12 @@ RUN cd /usr/local/src/yamdi-1.9 && gcc yamdi.c -o yamdi -O2 -Wall && mv yamdi /u
 
 #Install Java for Jhove
 RUN yum install -y java-1.8.0-openjdk-headless
-RUN mv /usr/local/src/jhove /usr/local/jhove && chmod +x /usr/local/jhove/jhove && rm -f /usr/local/src/jhove.tar.gz
+RUN mv /usr/local/src/jhove /usr/local/jhove && rm -f /usr/local/src/jhove.tar.gz
 
 RUN yum group remove -y "Development Tools"
 RUN yum clean all
+
+COPY jhove /usr/local/jhove/
+RUN chmod +x /usr/local/jhove/jhove
 
 EXPOSE 80 81

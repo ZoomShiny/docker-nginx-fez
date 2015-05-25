@@ -22,7 +22,7 @@ RUN yum install -y http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0
   yum install -y java-1.8.0-openjdk-headless && \
   mv /usr/local/src/jhove /usr/local/jhove && rm -f /usr/local/src/jhove.tar.gz && \
   yum group remove -y "Development Tools" && \
-  yum autoremove && yum clean all
+  yum autoremove -y && yum clean all
 
 COPY jhove /usr/local/jhove/
 RUN chmod +x /usr/local/jhove/jhove
